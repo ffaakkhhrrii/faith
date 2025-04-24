@@ -1,0 +1,1 @@
+export const BASE_URL = "https://api.myquran.com/v2"
