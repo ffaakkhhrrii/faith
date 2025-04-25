@@ -1,10 +1,9 @@
 import AyatContainer from "@/components/home/AyatContainer";
 import Dropdown from "@/components/home/Dropdown";
 import PrayerCard from "@/components/home/PrayerCard";
-import { ayatService } from "@/services/ayatService";
-import { prayerService } from "@/services/prayerService";
-import getTimesNow from "@/utils/helper";
-import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "@/hooks/useLocation";
+import { useOneAyat } from "@/hooks/useOneAyat";
+import { usePrayerTimes } from "@/hooks/usePrayerTime";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -12,24 +11,11 @@ export default function Home() {
 
   const [idLocation,setIdLocation] = useState<string>('1301');
 
-  const { data: location, isError: isErrorLocation, error: errorLocation } = useQuery({
-    queryKey: ['location'],
-    queryFn: prayerService.getAllLocation,
-    refetchOnWindowFocus: false
-  });
+  const { data: location, isError: isErrorLocation, error: errorLocation } = useLocation();
 
-  const { data: ayat, isLoading: isLoadingAyat, isError: isErrorAyat, error: errorAyat } = useQuery({
-    queryKey: ['ayat'],
-    queryFn: ayatService.getOneAyat,
-    refetchOnWindowFocus: false
-  });
+  const { data: ayat, isLoading: isLoadingAyat, isError: isErrorAyat, error: errorAyat } = useOneAyat();
 
-  const { data: prayerTimes, isLoading: isLoadingPrayerTimes, isError: isErrorPrayer, error: errorPrayer } = useQuery({
-    queryKey: ['prayerTimes',idLocation],
-    queryFn: () => prayerService.getPrayerTimes(idLocation, getTimesNow()),
-    refetchOnWindowFocus: false,
-    enabled: idLocation !== null
-  });
+  const { data: prayerTimes, isLoading: isLoadingPrayerTimes, isError: isErrorPrayer, error: errorPrayer } = usePrayerTimes(idLocation);
 
   return (
     <div>
