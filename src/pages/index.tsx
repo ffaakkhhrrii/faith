@@ -2,24 +2,31 @@ import AyatContainer from "@/components/home/AyatContainer";
 import Dropdown from "@/components/home/Dropdown";
 import PrayerCard from "@/components/home/PrayerCard";
 import SurahCard from "@/components/home/SurahCard";
+import SurahCardLoading from "@/components/home/SurahCardLoading";
 import { useLocation } from "@/hooks/useLocation";
 import { useOneAyat } from "@/hooks/useOneAyat";
 import { usePrayerTimes } from "@/hooks/usePrayerTime";
 import { useSurah } from "@/hooks/useSurah";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function Home() {
 
-  const [idLocation,setIdLocation] = useState<string>('1301');
+  const [idLocation, setIdLocation] = useState<string>('1301');
+  const [searchText,setSearchText] = useState("");
 
   const { data: location, isError: isErrorLocation, error: errorLocation } = useLocation();
 
   const { data: ayat, isLoading: isLoadingAyat, isError: isErrorAyat, error: errorAyat } = useOneAyat();
 
-  const {data: surah , isLoading: isLoadingSurah, isError: isErrorSurah, error:errorSurah} = useSurah();
+  const { data: surah, isLoading: isLoadingSurah, isError: isErrorSurah, error: errorSurah } = useSurah();
 
   const { data: prayerTimes, isLoading: isLoadingPrayerTimes, isError: isErrorPrayer, error: errorPrayer } = usePrayerTimes(idLocation);
+
+  const surahSearch = useMemo(()=>{
+    const filteredSurah = surah?.filter(sur=> sur?.name_id.toLowerCase().includes(searchText.toLowerCase()));
+    return filteredSurah;
+  },[surah,searchText]);
 
   return (
     <div>
@@ -38,7 +45,7 @@ export default function Home() {
         <div className="text-black mt-15">
           <div className="flex items-center justify-between">
             <h2 className="text-4xl text-left font-bold">Prayer Time</h2>
-            <Dropdown isError={isErrorLocation} error={errorLocation?.message} idLocation={idLocation} setIdLocation={setIdLocation} locations={location}/>
+            <Dropdown isError={isErrorLocation} error={errorLocation?.message} idLocation={idLocation} setIdLocation={setIdLocation} locations={location} />
           </div>
 
           <div className="grid grid-cols-5 gap-4 mt-10">
@@ -52,19 +59,26 @@ export default function Home() {
       </div>
 
       <div className="py-16 px-10 md:px-30 bg-[#F5F5F5]">
-      <h2 className="text-4xl text-left font-bold">Browse Surah</h2>
-        <div className="grid grid-cols-4 gap-4">
+        <h2 className="text-4xl text-left font-bold">Browse Surah</h2>
+        <input onChange={(e)=>setSearchText(e.target.value)} type="text" className="my-3 bg-white border border-gray-300 rounded-lg p-2 pl-4 outline-none w-full" placeholder="Search Surah"></input>
+        <div className="grid grid-cols-3 gap-4">
           {
-            surah?.map((sur)=>(
-              <SurahCard key={sur.number} title={sur.name_id} number={sur.number} translation={sur.translation_en} isLoading={isLoadingSurah} />
-            ))
+            isLoadingSurah ? (
+              <SurahCardLoading />
+            ) : isErrorSurah ? (
+              <h1 className="mt-5 text-red-600 font-medium text-lg">{errorSurah.message}</h1>
+            )
+              :
+              surahSearch?.map((sur) => (
+                <SurahCard key={sur.number} title={sur.name_id} number={sur.number} translation={sur.translation_en} />
+              ))
           }
         </div>
       </div>
 
       <div className="py-16 px-10 md:px-30">
         <div className="flex items-center justify-center space-x-30">
-        <Image alt="wireframe_app" src={'/wireframe_app.png'} height={300} width={300} />
+          <Image alt="wireframe_app" src={'/wireframe_app.png'} height={300} width={300} />
           <div className="-mt-10 text-left">
             <h1 className="font-bold text-4xl">Get The App</h1>
             <h3 className="font-medium text-2xl">Read the Quran anytime with audio <br /> and get notified for every prayer time</h3>
