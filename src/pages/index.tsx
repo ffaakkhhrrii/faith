@@ -1,9 +1,11 @@
 import AyatContainer from "@/components/home/AyatContainer";
 import Dropdown from "@/components/home/Dropdown";
 import PrayerCard from "@/components/home/PrayerCard";
+import SurahCard from "@/components/home/SurahCard";
 import { useLocation } from "@/hooks/useLocation";
 import { useOneAyat } from "@/hooks/useOneAyat";
 import { usePrayerTimes } from "@/hooks/usePrayerTime";
+import { useSurah } from "@/hooks/useSurah";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -14,6 +16,8 @@ export default function Home() {
   const { data: location, isError: isErrorLocation, error: errorLocation } = useLocation();
 
   const { data: ayat, isLoading: isLoadingAyat, isError: isErrorAyat, error: errorAyat } = useOneAyat();
+
+  const {data: surah , isLoading: isLoadingSurah, isError: isErrorSurah, error:errorSurah} = useSurah();
 
   const { data: prayerTimes, isLoading: isLoadingPrayerTimes, isError: isErrorPrayer, error: errorPrayer } = usePrayerTimes(idLocation);
 
@@ -28,7 +32,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-[#F5F5F5] py-16 px-10 md:px-30">
+      <div className="py-16 px-10 md:px-30">
         <AyatContainer ayat={ayat} isLoading={isLoadingAyat} isError={isErrorAyat} error={errorAyat?.message} />
 
         <div className="text-black mt-15">
@@ -47,7 +51,18 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="bg-[#F5F5F5] py-16 px-10 md:px-30">
+      <div className="py-16 px-10 md:px-30 bg-[#F5F5F5]">
+      <h2 className="text-4xl text-left font-bold">Browse Surah</h2>
+        <div className="grid grid-cols-4 gap-4">
+          {
+            surah?.map((sur)=>(
+              <SurahCard key={sur.number} title={sur.name_id} number={sur.number} translation={sur.translation_en} isLoading={isLoadingSurah} />
+            ))
+          }
+        </div>
+      </div>
+
+      <div className="py-16 px-10 md:px-30">
         <div className="flex items-center justify-center space-x-30">
         <Image alt="wireframe_app" src={'/wireframe_app.png'} height={300} width={300} />
           <div className="-mt-10 text-left">

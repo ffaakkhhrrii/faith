@@ -1,4 +1,5 @@
 import { Ayat } from "@/types/Ayat";
+import { Surah } from "@/types/Surah";
 import { BASE_URL } from "@/utils/constant";
 import axios from "axios";
 
@@ -14,5 +15,11 @@ export const ayatService = {
             surat: data.data.info.surat.nama.id
         }
         return ayat;
+    },
+    async getAllSurah(): Promise<Surah[]>{
+        const res = await axios.get(`${BASE_URL}/quran/surat/semua`);
+        const data = await res.data;
+        const surah: Surah[] = data.data;
+        return surah;
     }
 }
