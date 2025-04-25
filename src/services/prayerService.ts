@@ -1,3 +1,4 @@
+import { Location } from "@/types/Location";
 import { Prayer } from "@/types/Prayer"
 import { BASE_URL } from "@/utils/constant"
 import axios from "axios"
@@ -15,5 +16,12 @@ export const prayerService = {
             isya: data.data.jadwal.isya
         }
         return prayer;
+    },
+
+    async getAllLocation(): Promise<Location[]>{
+        const response = await axios.get(`${BASE_URL}/sholat/kota/semua`);
+        const data = await response.data;
+        const location: Location[] = data.data;
+        return location;
     }
 }

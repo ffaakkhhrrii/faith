@@ -22,7 +22,7 @@ export default function AyatContainer({ ayat, isLoading, isError, error }: AyatC
                         <>
                             <p className="mt-8 text-center text-5xl">{ayat?.arab}</p>
                             <p className="mt-5 text-center text-xl">{ayat?.text}</p>
-                            <p className="mt-5 text-left text-lg text-gray-400">[{ayat?.surat}, Juz {ayat?.juz} Ayat ke- {ayat?.ayah}]</p>
+                            <p className="mt-5 text-left text-lg text-gray-400">[{ayat?.surat}, Juz {ayat?.juz} Verse {ayat?.ayah}]</p>
                         </>
             }
         </div>
