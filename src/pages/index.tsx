@@ -8,12 +8,15 @@ import { useOneAyat } from "@/hooks/useOneAyat";
 import { usePrayerTimes } from "@/hooks/usePrayerTime";
 import { useSurah } from "@/hooks/useSurah";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 
 export default function Home() {
 
   const [idLocation, setIdLocation] = useState<string>('1301');
-  const [searchText,setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
+
+  const router = useRouter();
 
   const { data: location, isError: isErrorLocation, error: errorLocation } = useLocation();
 
@@ -23,10 +26,10 @@ export default function Home() {
 
   const { data: prayerTimes, isLoading: isLoadingPrayerTimes, isError: isErrorPrayer, error: errorPrayer } = usePrayerTimes(idLocation);
 
-  const surahSearch = useMemo(()=>{
-    const filteredSurah = surah?.filter(sur=> sur?.name_id.toLowerCase().includes(searchText.toLowerCase()));
+  const surahSearch = useMemo(() => {
+    const filteredSurah = surah?.filter(sur => sur?.name_id.toLowerCase().includes(searchText.toLowerCase()));
     return filteredSurah;
-  },[surah,searchText]);
+  }, [surah, searchText]);
 
   return (
     <div>
@@ -60,7 +63,7 @@ export default function Home() {
 
       <div className="py-16 px-10 md:px-30 bg-[#F5F5F5]">
         <h2 className="text-4xl text-left font-bold">Browse Surah</h2>
-        <input onChange={(e)=>setSearchText(e.target.value)} type="text" className="my-3 bg-white border border-gray-300 rounded-lg p-2 pl-4 outline-none w-full" placeholder="Search Surah"></input>
+        <input onChange={(e) => setSearchText(e.target.value)} type="text" className="my-3 bg-white border border-gray-300 rounded-lg p-2 pl-4 outline-none w-full" placeholder="Search Surah"></input>
         <div className="grid grid-cols-3 gap-4">
           {
             isLoadingSurah ? (
@@ -70,7 +73,9 @@ export default function Home() {
             )
               :
               surahSearch?.map((sur) => (
-                <SurahCard key={sur.number} title={sur.name_id} number={sur.number} translation={sur.translation_en} />
+                <SurahCard onClick={() => {
+                  router.push(`/surah/${sur.number}`);
+                }} key={sur.number} title={sur.name_id} number={sur.number} translation={sur.translation_en} />
               ))
           }
         </div>

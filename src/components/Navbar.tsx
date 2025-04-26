@@ -1,7 +1,9 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
 
 export default function Navbar() {
+    const router = useRouter();
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
@@ -16,12 +18,14 @@ export default function Navbar() {
     const handleClick = () => {
         if (scrolled) {
             window.scrollTo({ top: 0, behavior: "smooth" });
+        }else{
+            router.push('/');
         }
     };
 
 
     return (
-        <div className="flex justify-center items-center mt-5 fixed right-0 left-0 z-70">
+        <div className={`flex justify-center items-center mt-5 fixed right-0 left-0 z-70`}>
             <nav className={`rounded-4xl px-4 py-2 ${scrolled ? 'bg-black' : 'bg-white '} cursor-pointer`} onClick={handleClick}>
                 <div className="flex justify-center items-center relative">
                     <div className="flex">
@@ -38,6 +42,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </nav>
+
         </div>
     );
 }
