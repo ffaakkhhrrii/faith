@@ -20,8 +20,8 @@ export default function AyatContainer({ ayat, isLoading, isError, error }: AyatC
                     </>
                     : isError ? <h1 className="mt-5 text-red-600 font-medium text-lg">{error}</h1> :
                         <>
-                            <p className="mt-8 text-center text-5xl">{ayat?.arab}</p>
-                            <p className="mt-5 text-center text-xl">{ayat?.text}</p>
+                            <p className="mt-8 text-center text-3xl md:text-5xl">{ayat?.arab}</p>
+                            <p className="mt-5 text-center text:lg md:text-xl">{ayat?.text}</p>
                             <p className="mt-5 text-left text-lg text-gray-400">[{ayat?.surat}, Juz {ayat?.juz} Verse {ayat?.ayah}]</p>
                         </>
             }
