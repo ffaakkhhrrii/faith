@@ -29,8 +29,8 @@ export const ayatService = {
         const surah: Surah = data.data;
         return surah;
     },
-    async getAyat(idSurah: string| undefined | string[], start:string,end:string): Promise<AyatDetail[]>{
-        const res = await axios.get(`${BASE_URL}/quran/ayat/${idSurah}/${start}/${end}`);
+    async getAyat(idSurah: string| undefined | string[], range: string): Promise<AyatDetail[]>{
+        const res = await axios.get(`${BASE_URL}/quran/ayat/${idSurah}/${range}`);
         const data = await res.data;
         const ayat: AyatDetail[] = data.data;
         return ayat;
