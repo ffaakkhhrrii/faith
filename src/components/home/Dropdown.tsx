@@ -18,7 +18,7 @@ export default function Dropdown({ locations, idLocation, setIdLocation, error, 
         isError == true ? <h1 className="text-red-600 font-medium text-lg">{error}</h1> :
             <div className="relative inline-block text-left underline">
                 <div className="border-b-2 border-gray-900">
-                    <div onClick={() => setShowDropDown(!showDropDown)} className="-mb-1 inline-flex w-full justify-center gap-x-1.5 rounded-md bg-transparent px-3 py-2 text-xs font-semibold text-gray-900 cursor-pointer" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                    <div onClick={() => setShowDropDown(!showDropDown)} className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-transparent px-3 text-xs md:text-lg font-semibold text-gray-900 cursor-pointer" id="menu-button" aria-expanded="true" aria-haspopup="true">
                         {selectedLocation?.lokasi ?? "Pilih lokasi"}
                         <svg className="-mr-1 size-3 md:size-6 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                             <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
