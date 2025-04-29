@@ -1,5 +1,5 @@
-# Faith
 
+# Faith
 Faith is a simple and reliable platform to support your daily worship.
 Features include:
 
@@ -7,7 +7,6 @@ Features include:
 - Prayer Times: Accurate prayer schedules based on your location.
 - Surah Explorer: Read, listen, and understand Quranic Surahs easily.
 
-Connect with your faith, one day at a time.
+***Connect with your faith, one day at a time.***
 
-## Resource
-[API My Quran]('https://api.myquran.com/')
+Resource API : [My API Quran](https://api.myquran.com/)
