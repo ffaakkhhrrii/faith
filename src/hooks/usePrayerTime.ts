@@ -1,12 +1,12 @@
 import { prayerService } from "@/services/prayerService";
-import getTimesNow from "@/utils/helper";
+import { todayISO } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 
-export const usePrayerTimes = (idLocation: string) => {
+export const usePrayerTimes = (idLocation: string | null) => {
     return useQuery({
-        queryKey: ['prayerTimes', idLocation],
-        queryFn: () => prayerService.getPrayerTimes(idLocation, getTimesNow()),
+        queryKey: ['prayerTimes', idLocation, todayISO()],
+        queryFn: () => prayerService.getPrayerTimes(idLocation!, todayISO()),
         refetchOnWindowFocus: false,
-        enabled: idLocation !== null
+        enabled: !!idLocation
     });
 }

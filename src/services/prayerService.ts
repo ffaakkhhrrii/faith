@@ -1,27 +1,29 @@
 import { Location } from "@/types/Location";
-import { Prayer } from "@/types/Prayer"
-import { BASE_URL } from "@/utils/constant"
-import axios from "axios"
+import { Prayer } from "@/types/Prayer";
+import { BASE_URL } from "@/utils/constant";
+import axios from "axios";
 
 export const prayerService = {
-    async getPrayerTimes (idLocation: string,date:string): Promise<Prayer>{
+    async getPrayerTimes(idLocation: string, date: string): Promise<Prayer> {
         const response = await axios.get(`${BASE_URL}/sholat/jadwal/${idLocation}/${date}`);
-        const data = await response.data;
-        const prayer: Prayer = {
-            location: data.data.lokasi,
-            subuh: data.data.jadwal.subuh,
-            dzuhur: data.data.jadwal.dzuhur,
-            ashar: data.data.jadwal.ashar,
-            maghrib: data.data.jadwal.maghrib,
-            isya: data.data.jadwal.isya
-        }
-        return prayer;
+        const { lokasi, daerah, jadwal } = response.data.data;
+        return {
+            location: lokasi,
+            region: daerah,
+            date: jadwal.date,
+            imsak: jadwal.imsak,
+            subuh: jadwal.subuh,
+            terbit: jadwal.terbit,
+            dhuha: jadwal.dhuha,
+            dzuhur: jadwal.dzuhur,
+            ashar: jadwal.ashar,
+            maghrib: jadwal.maghrib,
+            isya: jadwal.isya,
+        };
     },
 
-    async getAllLocation(): Promise<Location[]>{
+    async getAllLocation(): Promise<Location[]> {
         const response = await axios.get(`${BASE_URL}/sholat/kota/semua`);
-        const data = await response.data;
-        const location: Location[] = data.data;
-        return location;
+        return response.data.data;
     }
 }

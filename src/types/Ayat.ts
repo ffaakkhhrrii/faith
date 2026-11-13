@@ -1,7 +1,9 @@
-export interface Ayat{
+export interface Ayat {
     arab: string,
+    latin: string,
     text: string,
     ayah: string,
     juz: string,
-    surat: string
+    surah: string,
+    surahName: string
 }

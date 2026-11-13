@@ -1,12 +1,10 @@
 import { ReactNode } from "react";
+import { Amiri, Figtree } from "next/font/google";
 import Navbar from "../Navbar";
-import { Figtree } from "next/font/google";
 import Footer from "../Footer";
 
-const figtree = Figtree({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const figtree = Figtree({ variable: "--font-figtree", subsets: ["latin"] });
+const amiri = Amiri({ variable: "--font-amiri", subsets: ["arabic"], weight: ["400", "700"] });
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,12 +12,10 @@ interface LayoutProps {
 
 export default function MainLayout({ children }: LayoutProps) {
   return (
-    <div className={`${figtree.className}`}>
-      <div className="relative">
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
-      </div>
+    <div className={`${figtree.variable} ${amiri.variable} font-sans`}>
+      <Navbar />
+      <main id="konten">{children}</main>
+      <Footer />
     </div>
   );
 }

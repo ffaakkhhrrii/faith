@@ -1,22 +1,24 @@
-interface SurahCardProps {
-    title: string;
-    translation: string | undefined;
-    number: string | undefined;
-    onClick: ()=> void
-}
+import Link from "next/link";
+import { Surah } from "@/types/Surah";
+import { formatRevelation } from "@/utils/helper";
 
-export default function SurahCard({ title, translation, number,onClick }: SurahCardProps) {
+export default function SurahCard({ surah }: { surah: Surah }) {
     return (
-        <div onClick={onClick} className="bg-white p-5 mt-5 rounded-2xl shadow-xs shadow-black/30 border border-gray-400 hover:border hover:border-[#40E0D0]/40 cursor-pointer">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="font-semibold text-2xl text-black">{title}</h1>
-                    <h1 className="font-light text-black text-lg">{translation}</h1>
-                </div>
-                <div>
-                    <h1 className="font-bold text-2xl text-[#40E0D0]">{number}</h1>
-                </div>
-            </div>
-        </div>
+        <li>
+            <Link
+                href={`/surah/${surah.number}`}
+                className="card-link flex h-full items-center gap-4 rounded-2xl border border-line bg-surface p-5"
+            >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent-soft font-bold text-accent tabular-nums">
+                    {surah.number}
+                </span>
+                <span className="min-w-0 flex-1">
+                    <span className="block truncate text-lg font-semibold">{surah.name_id}</span>
+                    <span className="block truncate text-muted">{surah.translation_id}</span>
+                    <span className="mt-1 block text-sm text-muted">{surah.number_of_verses} ayat · {formatRevelation(surah.revelation_id)}</span>
+                </span>
+                <span lang="ar" className="arabic shrink-0 pl-1 text-xl text-ink sm:text-2xl">{surah.name_short}</span>
+            </Link>
+        </li>
     );
 }

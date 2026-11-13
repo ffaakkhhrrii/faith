@@ -5,34 +5,29 @@ import { BASE_URL } from "@/utils/constant";
 import axios from "axios";
 
 export const ayatService = {
-    async getOneAyat() : Promise<Ayat> {
-        const response = await axios.get(`${BASE_URL}/quran/ayat/acak`);
-        const data = await response.data;
-        const ayat : Ayat = {
-            arab: data.data.ayat.arab,
-            text: data.data.ayat.text,
-            ayah: data.data.ayat.ayah,
-            juz: data.data.ayat.juz,
-            surat: data.data.info.surat.nama.id
-        }
-        return ayat;
+    async getAyatAt(surah: number, ayah: number): Promise<Ayat> {
+        const res = await axios.get(`${BASE_URL}/quran/ayat/${surah}/${ayah}`);
+        const verse = res.data.data[0];
+        return {
+            arab: verse.arab,
+            latin: verse.latin,
+            text: verse.text,
+            ayah: verse.ayah,
+            juz: verse.juz,
+            surah: verse.surah,
+            surahName: res.data.info.surat.nama.id,
+        };
     },
-    async getAllSurah(): Promise<Surah[]>{
+    async getAllSurah(): Promise<Surah[]> {
         const res = await axios.get(`${BASE_URL}/quran/surat/semua`);
-        const data = await res.data;
-        const surah: Surah[] = data.data;
-        return surah;
+        return res.data.data;
     },
-    async getOneSurah(id: string | undefined | string[]): Promise<Surah>{
+    async getOneSurah(id: string | undefined | string[]): Promise<Surah> {
         const res = await axios.get(`${BASE_URL}/quran/surat/${id}`);
-        const data = await res.data;
-        const surah: Surah = data.data;
-        return surah;
+        return res.data.data;
     },
-    async getAyat(idSurah: string| undefined | string[], range: string): Promise<AyatDetail[]>{
+    async getAyat(idSurah: string | undefined | string[], range: string): Promise<AyatDetail[]> {
         const res = await axios.get(`${BASE_URL}/quran/ayat/${idSurah}/${range}`);
-        const data = await res.data;
-        const ayat: AyatDetail[] = data.data;
-        return ayat;
+        return res.data.data;
     }
 }

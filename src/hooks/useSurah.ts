@@ -13,7 +13,7 @@ export const useSurah = () => {
 
 export const useOneSurah = (id: string | undefined | string[]) => {
     return useQuery({
-        queryKey: ['surahDetail'],
+        queryKey: ['surahDetail', id],
         queryFn: () => ayatService.getOneSurah(id),
         enabled: !!id
     });
@@ -25,9 +25,8 @@ export const useAllAyat = (idSurah: string | undefined | string[], totalAyat?: n
         queryFn: async ({ pageParam = 1 }) => {
             const start = pageParam;
             const end = Math.min(start + LIMIT - 1, totalAyat ?? Infinity);
-            console.log(start + ' dan ' + end)
             const range = `${start}-${end}`;
-            const ayat = await ayatService.getAyat(idSurah, range); // <--- kita kirim "1-30", "31-60", dst.
+            const ayat = await ayatService.getAyat(idSurah, range);
             return {
                 data: ayat,
                 nextStart: end + 1,

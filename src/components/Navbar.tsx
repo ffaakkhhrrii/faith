@@ -1,48 +1,93 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IoIosArrowUp } from "react-icons/io";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
+import Logo from "./Logo";
+
+const LINKS = [
+    { href: "/#jadwal", label: "Jadwal sholat" },
+    { href: "/#ayat", label: "One Day One Ayat" },
+    { href: "/#surah", label: "Al-Qur'an" },
+    { href: "/#android", label: "Android" },
+];
 
 export default function Navbar() {
-    const router = useRouter();
     const [scrolled, setScrolled] = useState(false);
+    const [showTop, setShowTop] = useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 100);
-        }
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const onScroll = () => {
+            setScrolled(window.scrollY > 24);
+            setShowTop(window.scrollY > 900);
+        };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    const handleClick = () => {
-        if (scrolled) {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }else{
-            router.push('/');
-        }
-    };
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+    }, [open]);
 
+    const solid = scrolled || open;
 
     return (
-        <div className={`flex justify-center items-center mt-5 fixed right-0 left-0 z-70`}>
-            <nav className={`rounded-4xl px-4 py-2 ${scrolled ? 'bg-black' : 'bg-white '} cursor-pointer`} onClick={handleClick}>
-                <div className="flex justify-center items-center relative">
-                    <div className="flex">
-                        {
-                            scrolled ? (
-                                <IoIosArrowUp className="text-[#40E0D0] text-2xl" />
-                            ) : (
-                                <>
-                                    <svg className="h-12 rotate-40" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(65,225,208,1)"><path d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"></path></svg>
-                                    <h1 className="text-black z-10 text-2xl pt-2 font-bold">Faith</h1>
-                                </>
-                            )
-                        }
-                    </div>
+        <>
+            <a href="#konten" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-surface focus:px-5 focus:py-3 focus:font-semibold focus:text-ink">
+                Langsung ke konten
+            </a>
+            <header
+                className={`fixed inset-x-0 top-0 z-50 transition-colors duration-200 ${solid ? "bg-paper/95 text-ink shadow-[0_1px_0_var(--color-line)] backdrop-blur" : "on-dark bg-transparent text-white"}`}
+            >
+                <nav aria-label="Navigasi utama" className="wrap flex h-16 items-center justify-between">
+                    <Link href="/" className="flex min-h-11 items-center" onClick={() => setOpen(false)}>
+                        <Logo />
+                    </Link>
+                    <ul className="hidden items-center gap-8 md:flex">
+                        {LINKS.map((l) => (
+                            <li key={l.href}>
+                                <Link href={l.href} className="flex min-h-11 items-center font-medium opacity-90 transition-opacity hover:opacity-100">
+                                    {l.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                    <button
+                        type="button"
+                        className="-mr-2 flex h-11 w-11 items-center justify-center rounded-full md:hidden"
+                        aria-expanded={open}
+                        aria-controls="menu-utama"
+                        aria-label={open ? "Tutup menu" : "Buka menu"}
+                        onClick={() => setOpen((v) => !v)}
+                    >
+                        {open ? <HiX className="h-6 w-6" /> : <HiMenuAlt3 className="h-6 w-6" />}
+                    </button>
+                </nav>
+                <div id="menu-utama" hidden={!open} className="md:hidden">
+                    <ul className="wrap flex h-[calc(100svh-4rem)] flex-col gap-2 pt-6">
+                        {LINKS.map((l) => (
+                            <li key={l.href}>
+                                <Link href={l.href} onClick={() => setOpen(false)} className="flex min-h-14 items-center border-b border-line text-2xl font-semibold">
+                                    {l.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
-            </nav>
-
-        </div>
+            </header>
+            <button
+                type="button"
+                aria-label="Kembali ke atas"
+                onClick={() => window.scrollTo({ top: 0 })}
+                className={`fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-night text-brand shadow-lg transition-all duration-200 hover:-translate-y-0.5 ${showTop ? "opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}
+                tabIndex={showTop ? 0 : -1}
+            >
+                <IoIosArrowUp className="h-6 w-6" />
+            </button>
+        </>
     );
 }
